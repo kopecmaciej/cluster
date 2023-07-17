@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: acme-issuer
+spec:
+  acme:
+    # change email address
+    email: maciej.kopec92@gmail.com
+    # configure challenge server, here we use Let's Encrypt's 
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # change server to https://acme-staging-v02.api.letsencrypt.org/directory when testing
+    privateKeySecretRef:
+      # secret for account key/token
+      name: gcp-key-secret
+    # Add single/multiple challenges
+    solvers:
+    # Configure a DNS or HTTP challenge
+    - dns01:
+        cloudDNS:
+          # The ID of the GCP project
+          project: $PROJECT_ID
+          # Secret key reference to the service account created above
+          serviceAccountSecretRef:
+            name: clouddns-dns01-solver-svc-acct
+            key: service-account.json
+      
