@@ -1,0 +1,52 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: penguin-ingress
+  annotations:
+   cert-manager.io/cluster-issuer: "letsencrypt-issuer"
+
+spec:
+  tls:
+  - hosts:
+    - decodedpenguin.com
+    - www.decodedpenguin.com
+    secretName: penguin-tls-secret
+  rules:
+  - host: decodedpenguin.com
+    http: &http_rules
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: pengiun-blog-service
+              port:
+                name: http
+  - host: www.decodedpenguin.com
+    http: *http_rules
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: penguin-http-websecure
+spec:
+  routes:
+    - kind: Rule
+      match: Host(`decodedpenguin.com`) || Host(`www.decodedpenguin.com`)
+      services:
+        - kind: Service
+          name: pengiun-blog-service
+          port: 80
+      middlewares:
+        - name: redirectscheme
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirectscheme
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+

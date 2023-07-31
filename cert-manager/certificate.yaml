@@ -4,9 +4,9 @@ metadata:
   name: letsencrypt-certificate
 spec:
   dnsNames:
-  - exmaple.com
-  - www.exmaple.com
-  secretName: example-tls-secret 
+  - decodedpenguin.com
+  - www.decodedpenguin.com
+  secretName: penguin-tls-secret
   issuerRef:
     name: letsencrypt-issuer
     kind: ClusterIssuer
