@@ -10,22 +10,7 @@ terraform {
   }
 }
 
-variable "pr_api_token_id" {
-  type = string
-  sensitive = true
-}
-
-variable "pr_api_token_secret" {
-  type = string
-  sensitive = true
-}
-  
-variable "pr_api_url" {
-  type = string
-}
-
 provider "proxmox" {
-  pm_debug = true
   pm_api_url = var.pr_api_url
   pm_api_token_id = var.pr_api_token_id
   pm_api_token_secret = var.pr_api_token_secret
